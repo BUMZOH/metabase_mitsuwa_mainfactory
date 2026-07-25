@@ -9,7 +9,9 @@ echo ======================================
 echo.
 
 set "SOURCE_DB=\\192.168.2.1\共有ファイル\M-光和共有ファイル\P_ProductControl\operation_data\main_factory_production_data.db"
-set "DEST_DIR=C:\Metabase\Data"
+
+rem BATファイルのあるフォルダを基準にする
+set "DEST_DIR=%~dp0Data"
 set "DEST_DB=%DEST_DIR%\main_factory_production_data.db"
 
 rem コピー先フォルダがなければ作成
