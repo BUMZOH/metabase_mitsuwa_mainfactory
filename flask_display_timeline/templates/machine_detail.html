@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>設備状態タイムライン</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="page-container timeline-page">
+        <h1>設備状態タイムライン</h1>
+
+        {% if error_message %}
+            <section class="error-card">
+                <h2>表示できませんでした</h2>
+                <p>{{ error_message }}</p>
+                {% if machine_no is not none %}
+                    <p>設備番号: {{ machine_no }}</p>
+                {% endif %}
+                {% if production_date %}
+                    <p>生産日: {{ production_date }}</p>
+                {% endif %}
+            </section>
+        {% else %}
+            <section class="timeline-card">
+                <div class="condition-area">
+                    <span>設備番号: MC{{ machine_no }}</span>
+                    <span>生産日: {{ production_date }}</span>
+                </div>
+
+                <img
+                    class="timeline-image"
+                    src="data:image/png;base64,{{ timeline_image_base64 }}"
+                    alt="MC{{ machine_no }} {{ production_date }} の設備状態タイムライン">
+            </section>
+        {% endif %}
+    </main>
+</body>
+</html>

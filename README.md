@@ -38,7 +38,7 @@ metabase_mitsuwa_mainfactory/
 │
 ├── metabase.db.mv.db
 ├── metabase.jar
-├── start_metabase.bat
+├── start_all.bat
 ├── metabase-version.txt
 ├── .gitignore
 └── README.md
@@ -51,7 +51,7 @@ metabase_mitsuwa_mainfactory/
 ## 管理対象
 
 - metabase.db.mv.db
-- start_metabase.bat
+- start_all.bat
 - plugins
 - README.md
 - metabase-version.txt
