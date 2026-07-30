@@ -10,8 +10,6 @@ set "PYTHON_EXE=%PROJECT_DIR%.venv\Scripts\python.exe"
 set "METABASE_JAR=%PROJECT_DIR%metabase.jar"
 
 set "SOURCE_DB=\\192.168.2.1\共有ファイル\M-光和共有ファイル\P_ProductControl\operation_data\main_factory_production_data.db"
-set "DEST_DIR=%PROJECT_DIR%Data"
-set "DEST_DB=%DEST_DIR%\main_factory_production_data.db"
 
 cd /d "%PROJECT_DIR%"
 if errorlevel 1 goto PROJECT_DIR_FAILED
@@ -28,6 +26,7 @@ echo.
 if not exist "%PYTHON_EXE%" goto PYTHON_NOT_FOUND
 if not exist "%FLASK_DIR%\app.py" goto APP_NOT_FOUND
 if not exist "%METABASE_JAR%" goto METABASE_NOT_FOUND
+if not exist "%SOURCE_DB%" goto DATABASE_NOT_FOUND
 
 echo Python:
 echo %PYTHON_EXE%
@@ -41,26 +40,11 @@ echo Metabase:
 echo %METABASE_JAR%
 echo.
 
-
-rem ========================================
-rem Copy database
-rem ========================================
-echo ========================================
-echo Copying database...
-echo ========================================
+echo NAS database:
+echo %SOURCE_DB%
 echo.
-
-if not exist "%DEST_DIR%" (
-    mkdir "%DEST_DIR%"
-    if errorlevel 1 goto DEST_DIR_CREATE_FAILED
-)
-
-copy /Y "%SOURCE_DB%" "%DEST_DB%"
-
-if errorlevel 1 goto DATABASE_COPY_FAILED
-
-echo.
-echo Database copy completed.
+echo NAS database connection confirmed.
+echo Metabase will read the NAS database directly.
 echo.
 
 
@@ -138,18 +122,11 @@ echo [ERROR] metabase.jar was not found:
 echo %METABASE_JAR%
 goto ERROR_EXIT
 
-:DEST_DIR_CREATE_FAILED
-echo [ERROR] Could not create the destination directory:
-echo %DEST_DIR%
-goto ERROR_EXIT
-
-:DATABASE_COPY_FAILED
-echo [ERROR] Database copy failed.
-echo Source:
+:DATABASE_NOT_FOUND
+echo [ERROR] The NAS database was not found:
 echo %SOURCE_DB%
 echo.
-echo Destination:
-echo %DEST_DB%
+echo Check the network connection and NAS availability.
 goto ERROR_EXIT
 
 :FLASK_START_FAILED
