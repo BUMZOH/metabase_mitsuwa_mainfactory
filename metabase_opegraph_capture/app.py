@@ -120,6 +120,9 @@ def main() -> None:
         try:
             page = context.pages[0] if context.pages else context.new_page()
 
+
+
+
             print("Chromeを起動しています。")
             print("Metabaseが起動済みであることを確認してください。")
             page.goto(
@@ -135,8 +138,12 @@ def main() -> None:
             print("3. ダッシュボードの表示を確認してください。")
             input("準備ができたらEnterキーを押してください。")
 
+
             # 手動設定後のURLを基準にする。
-            base_url = page.url
+            # base_url = page.url     # これでは最新URL取得できなかった(Reference参照)
+            base_url = page.evaluate("window.location.href")
+            print(f"base_url={base_url}")
+
 
             print()
             print("スクリーンショットを開始します。")
