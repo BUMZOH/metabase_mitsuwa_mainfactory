@@ -58,6 +58,9 @@ metabase_mitsuwa_mainfactory/
 ├── flask_display_timeline/
 │   └── Flaskアプリ一式
 │
+├── metabase_opegraph_capture/
+│   └── Playwrightによる設備別スクリーンショット取得アプリ
+│
 ├── plugins/
 │
 ├── metabase.db.mv.db
@@ -81,6 +84,7 @@ SQLiteデータベースはNAS上のファイルを直接参照します。
 - `metabase.db.mv.db`
 - `start_all.bat`
 - `flask_display_timeline/`
+- `metabase_opegraph_capture/`
 - `plugins/`
 - `.gitignore`
 - `README.md`
@@ -202,7 +206,7 @@ metabase_mitsuwa_mainfactory/
 
 ## 4. Python仮想環境の作成
 
-Flaskアプリ用のPython仮想環境を、プロジェクトフォルダ直下へ作成します。
+FlaskアプリおよびPlaywrightアプリ用のPython仮想環境を、プロジェクトフォルダ直下へ作成します。
 
 ```text
 metabase_mitsuwa_mainfactory/
@@ -273,6 +277,44 @@ http://localhost:3000
 
 ---
 
+# Playwrightスクリーンショットアプリ
+
+`metabase_opegraph_capture`は、Playwrightを利用してMetabaseダッシュボードを設備ごとに切り替えながらスクリーンショットを保存するアプリです。
+
+## 主な機能
+
+- Chromeを起動
+- Metabaseダッシュボードを表示
+- 日付フィルターは手動で設定
+- `machine_no`パラメータを切り替えて設備ごとに表示
+- ダッシュボード全体をPNG保存
+- Windows標準の「ピクチャ」フォルダへ保存
+
+保存ファイル名の例
+
+```text
+OpeGraph_MC001.png
+OpeGraph_MC003.png
+OpeGraph_MC040.png
+```
+
+## 起動方法
+
+`metabase_opegraph_capture`フォルダ内の
+
+```text
+start_capture.bat
+```
+
+を実行します。
+
+初回のみMetabaseへログインし、日付フィルターを設定してください。
+その後は設備番号を順番に切り替えながら、自動でスクリーンショットを保存します。
+
+Chromeのログイン情報は`playwright_browser_data`フォルダへ保存されます。
+
+---
+
 # ダッシュボードの自動更新
 
 Metabaseダッシュボードでは、自動更新間隔を設定できます。
@@ -316,6 +358,7 @@ GitHubから次のファイルを取得します。
 - `metabase.db.mv.db`
 - `start_all.bat`
 - `flask_display_timeline/`
+- `metabase_opegraph_capture/`
 - `plugins/`
 - `.gitignore`
 - `README.md`
@@ -395,7 +438,7 @@ Metabase終了後にファイルの更新が完了してからコミットしま
 
 # 備考
 
-本リポジトリは、「工場見える化」のMetabase環境とFlask連携部分を管理します。
+本リポジトリは、「工場見える化」のMetabase環境、Flask連携アプリ、およびPlaywrightによるスクリーンショット取得アプリをまとめて管理します。
 
 工場データであるSQLiteデータベースそのものは管理対象外です。
 

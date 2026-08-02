@@ -67,3 +67,8 @@ Desktop.ini
 .venv/
 __pycache__/
 *.py[cod]
+
+# Playwright ログイン情報等
+**/playwright_browser_data/
+
+
