@@ -103,6 +103,10 @@ def main() -> None:
     )
     print()
 
+    print("Metabaseの起動を待っています。")
+    print("ブラウザでMetabaseが開ける状態になったことを確認してください。")
+    input("Metabaseの起動を確認したらEnterキーを押してください。")
+
     with sync_playwright() as playwright:
         context = playwright.chromium.launch_persistent_context(
             user_data_dir=browser_data_directory,
@@ -120,11 +124,6 @@ def main() -> None:
         try:
             page = context.pages[0] if context.pages else context.new_page()
 
-
-
-
-            print("Chromeを起動しています。")
-            print("Metabaseが起動済みであることを確認してください。")
             page.goto(
                 DASHBOARD_URL,
                 wait_until="domcontentloaded",
@@ -138,12 +137,10 @@ def main() -> None:
             print("3. ダッシュボードの表示を確認してください。")
             input("準備ができたらEnterキーを押してください。")
 
-
             # 手動設定後のURLを基準にする。
             # base_url = page.url     # これでは最新URL取得できなかった(Reference参照)
             base_url = page.evaluate("window.location.href")
             print(f"base_url={base_url}")
-
 
             print()
             print("スクリーンショットを開始します。")

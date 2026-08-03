@@ -6,6 +6,7 @@ rem Project paths
 rem ========================================
 set "PROJECT_DIR=%~dp0"
 set "FLASK_DIR=%PROJECT_DIR%flask_display_timeline"
+set "CAPTURE_DIR=%PROJECT_DIR%metabase_opegraph_capture"
 set "PYTHON_EXE=%PROJECT_DIR%.venv\Scripts\python.exe"
 set "METABASE_JAR=%PROJECT_DIR%metabase.jar"
 
@@ -25,6 +26,7 @@ echo.
 
 if not exist "%PYTHON_EXE%" goto PYTHON_NOT_FOUND
 if not exist "%FLASK_DIR%\app.py" goto APP_NOT_FOUND
+if not exist "%CAPTURE_DIR%\app.py" goto CAPTURE_APP_NOT_FOUND
 if not exist "%METABASE_JAR%" goto METABASE_NOT_FOUND
 if not exist "%SOURCE_DB%" goto DATABASE_NOT_FOUND
 
@@ -66,6 +68,21 @@ timeout /t 2 /nobreak > nul
 
 
 rem ========================================
+rem Start OpeGraph Capture in another window
+rem ========================================
+echo ========================================
+echo Starting OpeGraph Capture...
+echo ========================================
+echo.
+
+start "OpeGraph Capture" /D "%CAPTURE_DIR%" "%PYTHON_EXE%" app.py
+
+if errorlevel 1 goto CAPTURE_START_FAILED
+
+timeout /t 2 /nobreak > nul
+
+
+rem ========================================
 rem Open Metabase in Chrome
 rem ========================================
 start "" powershell.exe -NoProfile -WindowStyle Hidden -Command ^
@@ -92,8 +109,8 @@ echo Metabase has stopped.
 echo Exit code: %EXIT_CODE%
 echo ========================================
 echo.
-echo Flask may still be running in its own window.
-echo Close the Flask window when it is no longer needed.
+echo Flask and OpeGraph Capture may still be running.
+echo Close those windows when they are no longer needed.
 echo.
 pause
 exit /b %EXIT_CODE%
@@ -136,6 +153,20 @@ echo %PYTHON_EXE%
 echo.
 echo Application:
 echo %FLASK_DIR%\app.py
+goto ERROR_EXIT
+
+:CAPTURE_APP_NOT_FOUND
+echo [ERROR] OpeGraph Capture app.py was not found:
+echo %CAPTURE_DIR%\app.py
+goto ERROR_EXIT
+
+:CAPTURE_START_FAILED
+echo [ERROR] OpeGraph Capture could not be started.
+echo Python:
+echo %PYTHON_EXE%
+echo.
+echo Application:
+echo %CAPTURE_DIR%\app.py
 goto ERROR_EXIT
 
 :ERROR_EXIT
